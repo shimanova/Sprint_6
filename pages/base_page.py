@@ -44,3 +44,40 @@ class BasePage:
         with allure.step("Клик на логотип Яндекса"):
             self.click_element(BaseLocators.YANDEX_LOGO)
             self.driver.switch_to.window(self.driver.window_handles[1])
+    
+    # ========== НОВЫЕ МЕТОДЫ ДЛЯ ТЕСТОВ ==========
+    
+    def wait_for_url_to_be(self, expected_url, timeout=5):
+        with allure.step(f"Ожидание URL: {expected_url}"):
+            WebDriverWait(self.driver, timeout).until(
+                EC.url_to_be(expected_url)
+            )
+    
+    def get_current_url(self):
+        with allure.step("Получение текущего URL"):
+            return self.driver.current_url
+    
+    def get_window_handles(self):
+        return self.driver.window_handles
+    
+    def switch_to_window(self, window_handle):
+        with allure.step(f"Переключение на окно: {window_handle}"):
+            self.driver.switch_to.window(window_handle)
+    
+    def wait_for_new_window_and_switch(self, original_handles, timeout=5):
+        with allure.step("Ожидание открытия новой вкладки"):
+            WebDriverWait(self.driver, timeout).until(
+                lambda d: len(d.window_handles) > len(original_handles)
+            )
+            new_handles = self.driver.window_handles
+            for handle in new_handles:
+                if handle not in original_handles:
+                    self.driver.switch_to.window(handle)
+                    return handle
+            return None
+    
+    def wait_for_url_contains(self, text, timeout=10):
+        with allure.step(f"Ожидание URL содержит: {text}"):
+            WebDriverWait(self.driver, timeout).until(
+                lambda d: text in d.current_url and d.current_url != "about:blank"
+            )

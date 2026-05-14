@@ -1,29 +1,19 @@
 import allure
 import pytest
 from pages.main_page import MainPage
+from constants import Urls, OrderData
 
 @allure.feature("Вопросы о важном")
 class TestFAQ:
     
-    EXPECTED_ANSWERS = [
-        "Сутки — 400 рублей. Оплата курьеру — наличными или картой.",
-        "Пока что у нас так: один заказ — один самокат. Если хотите покататься с друзьями, можете просто сделать несколько заказов — один за другим.",
-        "Допустим, вы оформляете заказ на 8 мая. Мы привозим самокат 8 мая в течение дня. Отсчёт времени аренды начинается с момента, когда вы оплатите заказ курьеру. Если мы привезли самокат 8 мая в 20:30, суточная аренда закончится 9 мая в 20:30.",
-        "Только начиная с завтрашнего дня. Но скоро станем расторопнее.",
-        "Пока что нет! Но если что-то срочное — всегда можно позвонить в поддержку по красивому номеру 1010.",
-        "Самокат приезжает к вам с полной зарядкой. Этого хватает на восемь суток — даже если будете кататься без передышек и во сне. Зарядка не понадобится.",
-        "Да, пока самокат не привезли. Штрафа не будет, объяснительной записки тоже не попросим. Все же свои.",
-        "Да, обязательно. Всем самокатов! И Москве, и Московской области."
-    ]
-    
     @allure.title("Проверка текста ответа на вопрос {index}")
-    @pytest.mark.parametrize("index", range(8))
-    def test_question_answer(self, driver, index):
+    @pytest.mark.parametrize("index, expected_text", enumerate(OrderData.FAQ_EXPECTED_ANSWERS))
+    def test_question_answer(self, driver, index, expected_text):
         main_page = MainPage(driver)
-        driver.get("https://qa-scooter.education-services.ru/")
+        driver.get(Urls.BASE_URL)
         
         main_page.click_question(index)
         actual_answer = main_page.get_answer_text(index)
         
-        assert actual_answer == self.EXPECTED_ANSWERS[index], \
-            f"Текст ответа на вопрос {index} не совпадает"
+        assert actual_answer == expected_text, \
+            f"Текст ответа на вопрос {index} не совпадает.\nОжидалось: {expected_text}\nПолучено: {actual_answer}"

@@ -12,4 +12,5 @@ geckodriver.log
 .DS_Store
 .env
 venv/
-env/allure_report/
+allure_report/
+allure_results/

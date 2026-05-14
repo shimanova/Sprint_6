@@ -2,36 +2,51 @@ import allure
 import pytest
 from pages.main_page import MainPage
 from pages.order_page import OrderPage
+from constants import Urls, OrderData
 
 @allure.feature("Заказ самоката")
 class TestOrder:
     
-    ORDER_DATA = [
-        ("Тест", "Тестик", "Москва, Кутузовский проезд 4", "Кутузовская", "89991234567", 
-         "13.05.2025", "сутки", "чёрный жемчуг", "Позвонить за час", "top"),
-        ("Тестов", "Тестовидзе", "Санкт-Петербург, Воздухоплавательная 5", "Парк Победы", "89997654321", 
-         "15.05.2026", "трое суток", "серая безысходность", "", "bottom"),
-    ]
-    
-    @allure.title("Позитивный сценарий заказа самоката")
-    @pytest.mark.parametrize("name,surname,address,metro,phone,date,rental_days,color,comment,button_position", ORDER_DATA)
-    def test_order_scooter(self, driver, name, surname, address, metro, phone, date, rental_days, color, comment, button_position):
+    @allure.title("Заказ самоката через верхнюю кнопку (чёрный жемчуг)")
+    def test_order_top_button_black(self, driver):
         main_page = MainPage(driver)
         order_page = OrderPage(driver)
         
-        driver.get("https://qa-scooter.education-services.ru/")
+        driver.get(Urls.BASE_URL)
+        main_page.click_order_top_button()
         
-        if button_position == "top":
-            main_page.click_order_top_button()
-        else:
-            main_page.click_order_bottom_button()
-        
-        order_page.fill_first_form(name, surname, address, metro, phone)
+        data = OrderData.ORDER_TOP_BUTTON_DATA
+        order_page.fill_first_form(
+            data["name"], data["surname"], data["address"], 
+            data["metro"], data["phone"]
+        )
         order_page.click_next()
-        
-        order_page.fill_second_form(date, rental_days, color, comment)
+        order_page.fill_second_form_black(
+            data["date"], data["rental_days"], data["comment"]
+        )
         order_page.click_order()
+        order_page.confirm_order()
         
+        assert order_page.is_order_successful(), "Заказ не был оформлен"
+    
+    @allure.title("Заказ самоката через нижнюю кнопку (серая безысходность)")
+    def test_order_bottom_button_grey(self, driver):
+        main_page = MainPage(driver)
+        order_page = OrderPage(driver)
+        
+        driver.get(Urls.BASE_URL)
+        main_page.click_order_bottom_button()
+        
+        data = OrderData.ORDER_BOTTOM_BUTTON_DATA
+        order_page.fill_first_form(
+            data["name"], data["surname"], data["address"], 
+            data["metro"], data["phone"]
+        )
+        order_page.click_next()
+        order_page.fill_second_form_grey(
+            data["date"], data["rental_days"], data["comment"]
+        )
+        order_page.click_order()
         order_page.confirm_order()
         
         assert order_page.is_order_successful(), "Заказ не был оформлен"

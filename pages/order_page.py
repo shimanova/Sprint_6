@@ -21,18 +21,27 @@ class OrderPage(BasePage):
         with allure.step("Клик на кнопку Далее"):
             self.click_element(OrderPageLocators.NEXT_BUTTON)
     
-    def fill_second_form(self, date, rental_days, color, comment):
-        with allure.step("Заполнение второй формы заказа"):
+    # Метод для ЧЁРНОГО жемчуга (отдельно)
+    def fill_second_form_black(self, date, rental_days, comment):
+        with allure.step("Заполнение второй формы заказа (чёрный жемчуг)"):
             self.send_keys(OrderPageLocators.DATE_FIELD, date)
             self.click_element(OrderPageLocators.RENTAL_PERIOD)
-            rental_locator = (OrderPageLocators.RENTAL_OPTION[0], OrderPageLocators.RENTAL_OPTION[1].format(days=rental_days))
+            rental_locator = (OrderPageLocators.RENTAL_OPTION[0], 
+                              OrderPageLocators.RENTAL_OPTION[1].format(days=rental_days))
             self.click_element(rental_locator)
-            
-            if color == "чёрный жемчуг":
-                self.click_element(OrderPageLocators.COLOR_BLACK)
-            elif color == "серая безысходность":
-                self.click_element(OrderPageLocators.COLOR_GREY)
-            
+            self.click_element(OrderPageLocators.COLOR_BLACK)
+            if comment:
+                self.send_keys(OrderPageLocators.COMMENT_FIELD, comment)
+    
+    # Метод для СЕРОЙ безысходности (отдельно)
+    def fill_second_form_grey(self, date, rental_days, comment):
+        with allure.step("Заполнение второй формы заказа (серая безысходность)"):
+            self.send_keys(OrderPageLocators.DATE_FIELD, date)
+            self.click_element(OrderPageLocators.RENTAL_PERIOD)
+            rental_locator = (OrderPageLocators.RENTAL_OPTION[0], 
+                              OrderPageLocators.RENTAL_OPTION[1].format(days=rental_days))
+            self.click_element(rental_locator)
+            self.click_element(OrderPageLocators.COLOR_GREY)
             if comment:
                 self.send_keys(OrderPageLocators.COMMENT_FIELD, comment)
     
@@ -43,10 +52,6 @@ class OrderPage(BasePage):
     def confirm_order(self):
         with allure.step("Подтверждение заказа в модальном окне"):
             self.click_element(OrderPageLocators.YES_BUTTON)
-    
-    def get_success_message(self):
-        with allure.step("Получение сообщения об успешном заказе"):
-            return self.get_text(OrderPageLocators.SUCCESS_MESSAGE)
     
     def is_order_successful(self):
         with allure.step("Проверка успешного создания заказа"):
