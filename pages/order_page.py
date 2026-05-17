@@ -21,7 +21,6 @@ class OrderPage(BasePage):
         with allure.step("Клик на кнопку Далее"):
             self.click_element(OrderPageLocators.NEXT_BUTTON)
     
-    # Метод для ЧЁРНОГО жемчуга (отдельно)
     def fill_second_form_black(self, date, rental_days, comment):
         with allure.step("Заполнение второй формы заказа (чёрный жемчуг)"):
             self.send_keys(OrderPageLocators.DATE_FIELD, date)
@@ -33,7 +32,6 @@ class OrderPage(BasePage):
             if comment:
                 self.send_keys(OrderPageLocators.COMMENT_FIELD, comment)
     
-    # Метод для СЕРОЙ безысходности (отдельно)
     def fill_second_form_grey(self, date, rental_days, comment):
         with allure.step("Заполнение второй формы заказа (серая безысходность)"):
             self.send_keys(OrderPageLocators.DATE_FIELD, date)

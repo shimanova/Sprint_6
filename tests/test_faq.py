@@ -10,7 +10,7 @@ class TestFAQ:
     @pytest.mark.parametrize("index, expected_text", enumerate(OrderData.FAQ_EXPECTED_ANSWERS))
     def test_question_answer(self, driver, index, expected_text):
         main_page = MainPage(driver)
-        driver.get(Urls.BASE_URL)
+        main_page.open_url(Urls.FULL_MAIN_URL)
         
         main_page.click_question(index)
         actual_answer = main_page.get_answer_text(index)

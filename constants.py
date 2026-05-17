@@ -1,11 +1,13 @@
 class Urls:
-    BASE_URL = "https://qa-scooter.education-services.ru/"
-    ORDER_URL = "https://qa-scooter.education-services.ru/order"
+    BASE_URL = "https://qa-scooter.education-services.ru"
+    
+    FULL_MAIN_URL = BASE_URL + "/"
+    FULL_ORDER_URL = BASE_URL + "/order"
+    
     YANDEX_URL = "https://ya.ru/"
 
 
 class OrderData:
-    # Ожидаемые тексты для FAQ
     FAQ_EXPECTED_ANSWERS = [
         "Сутки — 400 рублей. Оплата курьеру — наличными или картой.",
         "Пока что у нас так: один заказ — один самокат. Если хотите покататься с друзьями, можете просто сделать несколько заказов — один за другим.",
@@ -17,7 +19,6 @@ class OrderData:
         "Да, обязательно. Всем самокатов! И Москве, и Московской области."
     ]
 
-    # Данные для заказов (каждый заказ отдельно, без условий)
     ORDER_TOP_BUTTON_DATA = {
         "name": "Тест",
         "surname": "Тестик",
@@ -26,7 +27,7 @@ class OrderData:
         "phone": "89991234567",
         "date": "13.05.2025",
         "rental_days": "сутки",
-        "color": "чёрный жемчуг",
+        "color": "black",
         "comment": "Позвонить за час",
         "button_position": "top"
     }
@@ -39,7 +40,7 @@ class OrderData:
         "phone": "89997654321",
         "date": "15.05.2026",
         "rental_days": "трое суток",
-        "color": "серая безысходность",
+        "color": "grey",
         "comment": "",
         "button_position": "bottom"
     }

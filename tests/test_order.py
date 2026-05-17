@@ -12,7 +12,7 @@ class TestOrder:
         main_page = MainPage(driver)
         order_page = OrderPage(driver)
         
-        driver.get(Urls.BASE_URL)
+        main_page.open_url(Urls.FULL_MAIN_URL)
         main_page.click_order_top_button()
         
         data = OrderData.ORDER_TOP_BUTTON_DATA
@@ -34,7 +34,7 @@ class TestOrder:
         main_page = MainPage(driver)
         order_page = OrderPage(driver)
         
-        driver.get(Urls.BASE_URL)
+        main_page.open_url(Urls.FULL_MAIN_URL)
         main_page.click_order_bottom_button()
         
         data = OrderData.ORDER_BOTTOM_BUTTON_DATA

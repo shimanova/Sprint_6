@@ -1,5 +1,6 @@
 from pages.base_page import BasePage
 from locators.main_page_locators import MainPageLocators
+from constants import Urls
 import allure
 
 class MainPage(BasePage):
@@ -25,22 +26,16 @@ class MainPage(BasePage):
             self.scroll_to_element(MainPageLocators.ANSWER_PANELS[index])
             return self.get_text(MainPageLocators.ANSWER_PANELS[index])
     
-    # ========== НОВЫЕ МЕТОДЫ ДЛЯ ТЕСТОВ РЕДИРЕКТОВ ==========
-    
-    def click_scooter_logo_and_wait_for_main_page(self):
-        with allure.step("Клик на логотип Самоката и ожидание главной страницы"):
+    def click_scooter_logo_and_wait(self):
+        with allure.step("Нажимаем на логотип Самоката"):
             self.click_scooter_logo()
-            from constants import Urls
-            self.wait_for_url_to_be(Urls.BASE_URL)
-            assert self.get_current_url() == Urls.BASE_URL, \
-                "Логотип Самоката не привёл на главную страницу"
     
-    def click_yandex_logo_and_check_url(self):
-        with allure.step("Клик на логотип Яндекса и проверка открытия ya.ru"):
+    def wait_for_main_page_url(self):
+        with allure.step("Ожидание загрузки главной страницы"):
+            self.wait_for_url_to_be(Urls.FULL_MAIN_URL)
+    
+    def click_yandex_logo_and_wait_new_window(self):
+        with allure.step("Нажимаем на логотип Яндекса"):
             original_handles = self.get_window_handles()
             self.click_yandex_logo()
             self.wait_for_new_window_and_switch(original_handles)
-            self.wait_for_url_contains("ya.ru")
-            current_url = self.get_current_url()
-            assert "ya.ru" in current_url or "yandex" in current_url.lower(), \
-                f"Логотип Яндекса не привёл на ya.ru. Текущий URL: {current_url}"

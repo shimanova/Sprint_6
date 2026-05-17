@@ -8,6 +8,10 @@ class BasePage:
         self.driver = driver
         self.wait = WebDriverWait(driver, 10)
     
+    def open_url(self, url):
+        with allure.step(f"Открытие URL: {url}"):
+            self.driver.get(url)
+    
     def click_element(self, locator):
         with allure.step(f"Клик на элемент: {locator}"):
             element = self.wait.until(EC.element_to_be_clickable(locator))
@@ -45,8 +49,6 @@ class BasePage:
             self.click_element(BaseLocators.YANDEX_LOGO)
             self.driver.switch_to.window(self.driver.window_handles[1])
     
-    # ========== НОВЫЕ МЕТОДЫ ДЛЯ ТЕСТОВ ==========
-    
     def wait_for_url_to_be(self, expected_url, timeout=5):
         with allure.step(f"Ожидание URL: {expected_url}"):
             WebDriverWait(self.driver, timeout).until(
@@ -59,10 +61,6 @@ class BasePage:
     
     def get_window_handles(self):
         return self.driver.window_handles
-    
-    def switch_to_window(self, window_handle):
-        with allure.step(f"Переключение на окно: {window_handle}"):
-            self.driver.switch_to.window(window_handle)
     
     def wait_for_new_window_and_switch(self, original_handles, timeout=5):
         with allure.step("Ожидание открытия новой вкладки"):
